@@ -1,19 +1,17 @@
 package main
 
 import (
-	"flag"
-	"log"
-	"net/http"
+	user "./User/model"
+	"github.com/gin-gonic/gin"
 )
 
-var addr = flag.String("port", ":8010", "http service address") // Q=17, R=18
-
 func main() {
-	flag.Parse()
-	http.Handle("/", nil)
-	err := http.ListenAndServe(*addr, nil)
-	if err != nil {
-		log.Fatal("ListenAndServe:", err)
-	}
-}
+	router := gin.Default()
+	userGroup := router.Group("/user")
+	{
+		userGroup.POST("/login", user.Login)
+		userGroup.POST("/register", user.RegisterAccount)
 
+	}
+	router.Run(":9000")
+}
