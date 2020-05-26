@@ -1,17 +1,11 @@
 package main
 
 import (
-	user "./User/model"
-	"github.com/gin-gonic/gin"
+	"./DBConnections"
+	"net/http"
 )
 
 func main() {
-	router := gin.Default()
-	userGroup := router.Group("/user")
-	{
-		userGroup.POST("/login", user.Login)
-		userGroup.POST("/register", user.RegisterAccount)
-
-	}
-	router.Run(":9000")
+	http.HandleFunc("/insertintodb", DBConnections.DB_Insert_Student)
+	http.ListenAndServe(":8080", nil)
 }
