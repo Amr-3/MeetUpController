@@ -3,18 +3,19 @@ package user
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"log"
-
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"golang.org/x/crypto/bcrypt"
+	"log"
 )
 
 type User struct {
-	firstName string
-	lastName  string
-	email     string
-	password  string
-	freeTimes []string
-	groups    []string
+	id        primitive.ObjectID `json:"_id,omitempty" bson:"_id,omitempty"`
+	firstName string             `json:"firstName,omitempty" bson:"firstName,omitempty"`
+	lastName  string             `json:"lastName,omitempty" bson:"lastName,omitempty"`
+	email     string             `json:"email,omitempty" bson:"email,omitempty"`
+	password  string             `json:"password,omitempty" bson:"password,omitempty"`
+	freeTimes []string           `json:"freeTimes,omitempty" bson:"freeTimes,omitempty"`
+	groups    []string           `json:"groups,omitempty" bson:"groups,omitempty"`
 }
 
 func New(firstName string, lastName string, password string, email string) bool {

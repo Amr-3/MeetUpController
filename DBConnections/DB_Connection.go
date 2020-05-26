@@ -7,8 +7,7 @@ import (
 	"time"
 )
 
-
-func CreateDBconnection(connectionString string) (*mongo.Client, error, context.Context){
+func CreateDBconnection(connectionString string) (*mongo.Client, error, context.Context) {
 	client, err := mongo.NewClient(options.Client().ApplyURI(connectionString))
 	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
 	err = client.Connect(ctx)
