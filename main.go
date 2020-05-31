@@ -5,6 +5,7 @@ import (
 	"./Place"
 	user "./User/model"
 	"github.com/gin-gonic/gin"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"net/http"
 )
 
@@ -21,7 +22,6 @@ func main() {
 	router.Run(":9000")
 
 	p := Place.Place{
-		ID:          1,
 		Name:        "Primos",
 		Votes:       5,
 		Rating:      4.8,
