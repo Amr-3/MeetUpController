@@ -1,11 +1,10 @@
 package main
 
 import (
-	"net/http"
-
 	"./DBConnections"
 	user "./User/model"
 	"github.com/gin-gonic/gin"
+	"net/http"
 )
 
 func main() {
