@@ -9,8 +9,8 @@ import (
 )
 
 func main() {
-	http.HandleFunc("/insertintodb", DBConnections.DB_Insert_Student)
-	http.HandleFunc("/removefromdb", DBConnections.DB_Delete_Student)
+	http.HandleFunc("/insertintodb", DBConnections.DbInsert)
+	http.HandleFunc("/removefromdb", DBConnections.DbDelete)
 	router := gin.Default()
 	userGroup := router.Group("/user")
 	{
