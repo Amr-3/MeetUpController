@@ -2,9 +2,7 @@ package DBConnections
 
 import (
 	"context"
-	"encoding/json"
 	"log"
-	"net/http"
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -17,37 +15,37 @@ type Student struct {
 	Aykofta   string             `json:"aykofta,omitempty" bson:"aykofta,omitempty"`
 }
 
-func DB_Insert_Student(res http.ResponseWriter, req *http.Request) {
+func DbInsert (data, collection string) bool {
 	client, err, conContext := CreateDBconnection("mongodb+srv://meetup:9tS3qY8BKwXb1n8d@test-cluster-dvxai.mongodb.net/meetup")
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer client.Disconnect(conContext)
-	res.Header().Add("content-type", "application/json")
-	var stud Student
-	_ = json.NewDecoder(req.Body).Decode(&stud)
-	collection := client.Database("meetup").Collection("user51")
+	mongoClient := client.Database("meetup").Collection(collection)
 	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
-	result, err := collection.InsertOne(ctx, stud)
+	_, err = mongoClient.InsertOne(ctx, data)
 	if err != nil {
 		log.Fatal(err)
+		return false
 	}
-	json.NewEncoder(res).Encode(result)
+	return true
 }
 
-func DB_Delete_Student(res http.ResponseWriter, req *http.Request) {
+func DbDelete(ID, collection string) bool {
 	client, err, conContext := CreateDBconnection("mongodb+srv://meetup:9tS3qY8BKwXb1n8d@test-cluster-dvxai.mongodb.net/meetup")
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer client.Disconnect(conContext)
-	var stud Student
-	_ = json.NewDecoder(req.Body).Decode(&stud)
-	collection := client.Database("meetup").Collection("user51")
+
+	mongoClient := client.Database("meetup").Collection(collection)
 	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
-	result, err := collection.DeleteOne(ctx, stud)
+
+	_, err = mongoClient.DeleteOne(ctx, ID)
+
 	if err != nil {
 		log.Fatal(err)
+		return false
 	}
-	json.NewEncoder(res).Encode(result)
+	return true
 }
