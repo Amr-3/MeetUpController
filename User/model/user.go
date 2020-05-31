@@ -53,21 +53,17 @@ func comparePasswords(hashedPwd string, plainPwd []byte) bool {
 		log.Println(err)
 		return false
 	}
-
 	return true
 }
 func getPwd(pwd string) []byte {
-
 	_, err := fmt.Scan(&pwd)
 	if err != nil {
 		log.Println(err)
 	}
-
 	return []byte(pwd)
 }
 
 func hashAndSalt(pwd []byte) string {
-
 	hash, err := bcrypt.GenerateFromPassword(pwd, bcrypt.MinCost)
 	if err != nil {
 		log.Println(err)
