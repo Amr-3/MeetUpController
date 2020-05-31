@@ -2,9 +2,10 @@ package DBConnections
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"time"
-
+	place "../Place"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
@@ -15,7 +16,7 @@ type Student struct {
 	Aykofta   string             `json:"aykofta,omitempty" bson:"aykofta,omitempty"`
 }
 
-func DbInsert (data, collection string) bool {
+func DbInsert (data place.Place, collection string) bool {
 	client, err, conContext := CreateDBconnection("mongodb+srv://meetup:9tS3qY8BKwXb1n8d@test-cluster-dvxai.mongodb.net/meetup")
 	if err != nil {
 		log.Fatal(err)
@@ -23,15 +24,16 @@ func DbInsert (data, collection string) bool {
 	defer client.Disconnect(conContext)
 	mongoClient := client.Database("meetup").Collection(collection)
 	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
-	_, err = mongoClient.InsertOne(ctx, data)
+	result, err := mongoClient.InsertOne(ctx, data)
 	if err != nil {
 		log.Fatal(err)
 		return false
 	}
+	fmt.Println(result)
 	return true
 }
 
-func DbDelete(ID, collection string) bool {
+func DbDelete(ID primitive.ObjectID, collection string) bool {
 	client, err, conContext := CreateDBconnection("mongodb+srv://meetup:9tS3qY8BKwXb1n8d@test-cluster-dvxai.mongodb.net/meetup")
 	if err != nil {
 		log.Fatal(err)
