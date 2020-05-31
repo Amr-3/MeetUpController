@@ -2,16 +2,12 @@ package main
 
 import (
 	"./DBConnections"
-	"./Place"
 	user "./User/model"
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	"net/http"
 )
 
 func main() {
-	http.HandleFunc("/insertintodb", DBConnections.DbInsert)
-	http.HandleFunc("/removefromdb", DBConnections.DbDelete)
 	router := gin.Default()
 	userGroup := router.Group("/user")
 	{
@@ -19,16 +15,18 @@ func main() {
 		userGroup.POST("/register", user.RegisterAccount)
 
 	}
-	router.Run(":9000")
 
-	p := Place.Place{
+	/*p := Place.Place{
 		Name:        "Primos",
 		Votes:       5,
 		Rating:      4.8,
 		Description: "the best pizza restaurant",
 		UserID:      []string{"1","2","3","4"},
-	}
+	}*/
 
-	DBConnections.DbInsert(p,"AyEsm")
+	//DBConnections.DbInsert(p,"AyEsm")
+	idPrimitive, _ := primitive.ObjectIDFromHex("5ed43386749d03263305f7ca")
+	DBConnections.DbDelete(idPrimitive, "AyEsm")
+	router.Run(":9000")
 }
 

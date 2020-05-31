@@ -12,7 +12,7 @@ type Place struct {
 	Votes       int                `json:"votes,omitempty" bson:"votes,omitempty"`
 	Rating      float64            `json:"rating,omitempty" bson:"rating,omitempty"`
 	Description string             `json:"description,omitempty" bson:"description,omitempty"`
-	UserID      []string           `json:"name,omitempty" bson:"name,omitempty"`
+	UserID      []string           `json:"userid,omitempty" bson:"userid,omitempty"`
 }
 
 func (p Place) Test() {

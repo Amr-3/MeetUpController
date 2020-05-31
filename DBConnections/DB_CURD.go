@@ -3,6 +3,7 @@ package DBConnections
 import (
 	"context"
 	"fmt"
+	"go.mongodb.org/mongo-driver/bson"
 	"log"
 	"time"
 	place "../Place"
@@ -43,7 +44,7 @@ func DbDelete(ID primitive.ObjectID, collection string) bool {
 	mongoClient := client.Database("meetup").Collection(collection)
 	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
 
-	_, err = mongoClient.DeleteOne(ctx, ID)
+	_, err = mongoClient.DeleteOne(ctx, bson.M{"_id": ID})
 
 	if err != nil {
 		log.Fatal(err)
