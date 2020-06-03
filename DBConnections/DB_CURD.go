@@ -1,13 +1,14 @@
 package DBConnections
 
 import (
+	place "../Place"
+	."../config"
 	"context"
 	"fmt"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"log"
 	"time"
-	place "../Place"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type Student struct {
@@ -18,7 +19,7 @@ type Student struct {
 }
 
 func DbInsert (data place.Place, collection string) bool {
-	client, err, conContext := CreateDBconnection("mongodb+srv://meetup:9tS3qY8BKwXb1n8d@test-cluster-dvxai.mongodb.net/meetup")
+	client, err, conContext := CreateDBconnection(Config.ConnectionString)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -35,7 +36,7 @@ func DbInsert (data place.Place, collection string) bool {
 }
 
 func DbDelete(ID primitive.ObjectID, collection string) bool {
-	client, err, conContext := CreateDBconnection("mongodb+srv://meetup:9tS3qY8BKwXb1n8d@test-cluster-dvxai.mongodb.net/meetup")
+	client, err, conContext := CreateDBconnection(Config.ConnectionString)
 	if err != nil {
 		log.Fatal(err)
 	}
