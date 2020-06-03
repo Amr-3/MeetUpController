@@ -1,5 +1,5 @@
 {
-  "Port": 9000,
-  "DbUsername": "meetup",
-  "DbPassword": "9tS3qY8BKwXb1n8d",
+  "PORT": ":9000",
+  "DB_USERNAME": "meetup",
+  "DB_PASSWORD": "9tS3qY8BKwXb1n8d"
 }

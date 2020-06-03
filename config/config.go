@@ -6,20 +6,19 @@ import (
 )
 
 type Configuration struct {
-	Port            string
-	DbUsername   string
-	DbPassword string
-	ConnectionString string
+	PORT              string
+	DB_USERNAME       string
+	DB_PASSWORD       string
+	CONNECTION_STRING string
 }
 
 var Config Configuration
 
-func LoadConfig(){
+func LoadConfig() {
 	Config = Configuration{}
 	err := gonfig.GetConf("./config/config.json", &Config)
-	Config.ConnectionString = "mongodb+srv://"+Config.DbUsername+":"+Config.DbPassword+"@test-cluster-dvxai.mongodb.net/meetup"
-	if err!=nil {
+	Config.CONNECTION_STRING = "mongodb+srv://" + Config.DB_USERNAME + ":" + Config.DB_PASSWORD + "@test-cluster-dvxai.mongodb.net/meetup"
+	if err != nil {
 		log.Fatal(err)
 	}
 }
-
