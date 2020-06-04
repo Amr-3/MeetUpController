@@ -3,14 +3,20 @@ package user
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"golang.org/x/crypto/bcrypt"
 	"log"
 	"net/http"
-	"encoding/json"
 )
 
 type User struct {
-	first_name string             `json:"first_name" binding:"required"`
+	id        primitive.ObjectID `json:"_id,omitempty" bson:"_id,omitempty"`
+	Firstname string             `json:"firstname,omitempty"`
+	Lastname  string             `json:"lastName,omitempty"`
+	Email     string             `json:"email,omitempty" binding:"required"`
+	Password  string             `json:"password,omitempty" binding:"required"`
+	FreeTimes []string           `json:"freetimes,omitempty" `
+	Groups    []string           `json:"groups,omitempty"`
 }
 
 func New(firstName string, lastName string, password string, email string) bool {
@@ -38,13 +44,14 @@ func AddPlaceInGroup(firstName string, lastName string) bool {
 func RegisterAccount(c *gin.Context) {
 
 	var input User
-	err:= c.BindJSON(&input)
-	fmt.Println(err)
+	err := c.ShouldBindJSON(&input)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	fmt.Println(input)
+	fmt.Println(input.Firstname)
+	fmt.Println(input.Lastname)
+
 	c.JSON(200, gin.H{
 		"message": input,
 	})
