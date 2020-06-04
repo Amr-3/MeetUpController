@@ -10,7 +10,7 @@ import (
 func main() {
 	LoadConfig()
 	Println(Config.PORT)
-	router := gin.Default() // localhost:9000
+	router := gin.Default()
 	userGroup := router.Group("/user")
 	{
 		userGroup.POST("/register", RegisterAccount)
