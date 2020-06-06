@@ -5,13 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
 	"log"
-	"net/http"
-	"encoding/json"
 )
-
-type User struct {
-	first_name string             `json:"first_name" binding:"required"`
-}
 
 func New(firstName string, lastName string, password string, email string) bool {
 	return true
@@ -36,18 +30,13 @@ func AddPlaceInGroup(firstName string, lastName string) bool {
 	return true
 }
 func RegisterAccount(c *gin.Context) {
-
-	var input User
-	err:= c.BindJSON(&input)
-	fmt.Println(err)
-	if err != nil {
+	/*if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
-	}
-	fmt.Println(input)
-	c.JSON(200, gin.H{
+	}*/
+/*	c.JSON(200, gin.H{
 		"message": input,
-	})
+	})*/
 }
 func comparePasswords(hashedPwd string, plainPwd []byte) bool {
 
