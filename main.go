@@ -15,7 +15,7 @@ func main() {
 	{
 		userGroup.POST("/register", RegisterAccount)
 		userGroup.POST("/login", Login)
+		userGroup.POST("/id/:id/addFreeTime", AddFreeTime)
 	}
-
 	router.Run(Config.PORT)
 }

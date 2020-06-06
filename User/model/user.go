@@ -2,6 +2,7 @@ package user
 
 import (
 	DB "../../DBConnections"
+	. "../../schema"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -16,7 +17,7 @@ type User struct {
 	Lastname  string             `json:"lastName,omitempty"`
 	Email     string             `json:"email,omitempty" binding:"required"`
 	Password  string             `json:"password,omitempty" binding:"required"`
-	FreeTimes []string           `json:"freetimes,omitempty" `
+	FreeTimes []FreeTime         `json:"freetime,omitempty" `
 	Groups    []string           `json:"groups,omitempty"`
 }
 
@@ -41,8 +42,34 @@ func Login(c *gin.Context) {
 func CreateGroup(firstName string, lastName string) bool {
 	return true
 }
-func AddFreeTime(firstName string, lastName string) bool {
+
+func CheckTimeConflicts(list []FreeTime) bool {
+	for i, time1 := range list{
+		for j, time2 := range list {
+			if j <= i {
+				continue
+			}
+			if time2.StartTime > time1.StartTime && time2.StartTime < time1.EndTime {
+				return false
+			}
+			if time2.EndTime > time1.StartTime && time2.EndTime < time1.EndTime {
+				return false
+			}
+		}
+	}
 	return true
+}
+
+func AddFreeTime(c *gin.Context) {
+	var ft []FreeTime
+	err := c.ShouldBind(&ft)
+	if err != nil{
+		log.Fatal(err)
+		c.JSON(500, gin.H{})
+	}
+	var UserTime []FreeTime
+	UserTime = append(UserTime, ft...)
+	CheckTimeConflicts (UserTime)
 }
 func VoteForPlace(firstName string, lastName string) bool {
 	return true
@@ -86,3 +113,4 @@ func hashAndSalt(pwd []byte) string {
 	}
 	return string(hash)
 }
+

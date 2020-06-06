@@ -64,3 +64,8 @@ func DbDelete(ID primitive.ObjectID, collection string) bool {
 	}
 	return true
 }
+
+func DbUpdate(ID primitive.ObjectID, collection string) bool{
+	// TODO
+	return true;
+}
