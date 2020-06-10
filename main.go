@@ -3,19 +3,22 @@ package main
 import (
 	. "./User/model"
 	. "./config"
-	. "fmt"
+	."fmt"
 	"github.com/gin-gonic/gin"
+	"time"
 )
 
 func main() {
 	LoadConfig()
-	Println(Config.PORT)
+	x := time.Now().Unix()
+	y := time.Unix(x,0)
+	Println(y)
 	router := gin.Default()
 	userGroup := router.Group("/user")
 	{
 		userGroup.POST("/register", RegisterAccount)
 		userGroup.POST("/login", Login)
-		userGroup.POST("/id/:id/addFreeTime", AddFreeTime)
+		userGroup.POST("/id/:id/add-free-time", AddFreeTime)
 	}
 	router.Run(Config.PORT)
 }

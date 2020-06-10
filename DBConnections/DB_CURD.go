@@ -2,6 +2,7 @@ package DBConnections
 
 import (
 	. "../config"
+	. "../schema"
 	"context"
 	"fmt"
 	"go.mongodb.org/mongo-driver/bson"
@@ -65,7 +66,24 @@ func DbDelete(ID primitive.ObjectID, collection string) bool {
 	return true
 }
 
-func DbUpdate(ID primitive.ObjectID, collection string) bool{
-	// TODO
-	return true;
+func DbUpdate(data interface{}, collection string) bool {
+	var user User
+	user = data.(User)
+	client, err, conContext := CreateDBconnection(Config.CONNECTION_STRING)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer client.Disconnect(conContext)
+	mongoClient := client.Database("meetup").Collection(collection)
+	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
+
+	filter := bson.D{{"_id", user.Id}}
+	update := bson.D{{"$set", bson.D{{"freetimes", user.FreeTimes}}}}
+	result, err := mongoClient.UpdateOne(ctx, filter, update)
+	if err != nil {
+		log.Fatal(err)
+		return false
+	}
+	fmt.Println(result)
+	return true
 }

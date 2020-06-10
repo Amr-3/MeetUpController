@@ -11,15 +11,7 @@ import (
 	"net/http"
 )
 
-type User struct {
-	id        primitive.ObjectID `json:"_id,omitempty" bson:"_id,omitempty"`
-	Firstname string             `json:"firstname,omitempty"`
-	Lastname  string             `json:"lastName,omitempty"`
-	Email     string             `json:"email,omitempty" binding:"required"`
-	Password  string             `json:"password,omitempty" binding:"required"`
-	FreeTimes []FreeTime         `json:"freetime,omitempty" `
-	Groups    []string           `json:"groups,omitempty"`
-}
+
 
 func New(firstName string, lastName string, password string, email string) bool {
 	return true
@@ -63,13 +55,30 @@ func CheckTimeConflicts(list []FreeTime) bool {
 func AddFreeTime(c *gin.Context) {
 	var ft []FreeTime
 	err := c.ShouldBind(&ft)
+	userId := c.Param("id")
+	fmt.Println("user Id:: "+userId)
 	if err != nil{
 		log.Fatal(err)
 		c.JSON(500, gin.H{})
 	}
-	var UserTime []FreeTime
-	UserTime = append(UserTime, ft...)
-	CheckTimeConflicts (UserTime)
+	/*User, _ := DB.DbRead("id",userId,"User")
+	fmt.Println(User["freetime"])
+	UserTime := strings.Split(User["freetime"],",")
+	var userTimesV3 []int
+	json.Unmarshal([]byte(User["freetime"]), &userTimesV3)
+
+	if CheckTimeConflicts (userTimesV3) != true {
+		c.JSON(69, gin.H{
+			"message": "Bara ya ibn el wes5a mn hna",
+		})
+	}*/
+	var usr User
+	usr.Id, _ = primitive.ObjectIDFromHex(userId)
+	usr.FreeTimes = ft
+	DB.DbUpdate(usr,"User")
+	c.JSON(200, gin.H{
+		"message": "Shokrn ya setaq, ele mara el gya send nudes",
+	})
 }
 func VoteForPlace(firstName string, lastName string) bool {
 	return true
