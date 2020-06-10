@@ -28,8 +28,8 @@ func DbInsert(data interface{}, collection string) bool {
 	fmt.Println(result)
 	return true
 }
-func DbRead(key string, value string, collection string) (map[string]string, error) {
-	var result map[string]string
+func DbRead(key string, value string, collection string) (interface{}, error) {
+	var result interface{}
 	client, err, conContext := CreateDBconnection(Config.CONNECTION_STRING)
 	if err != nil {
 		log.Fatal(err)
@@ -47,6 +47,33 @@ func DbRead(key string, value string, collection string) (map[string]string, err
 	}
 	return result, nil
 }
+
+func DbReadbyID(key string, id primitive.ObjectID, collection string) (*mongo.Collection, error) {
+	client, err, conContext := CreateDBconnection(Config.CONNECTION_STRING)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer client.Disconnect(conContext)
+	mongoClient := client.Database("meetup").Collection(collection)
+	fmt.Println("######1")
+	result, err := mongoClient.Find(context.TODO(), bson.D{{key, id}})
+	fmt.Println("######2")
+	fmt.Println(result)
+	if err != nil {
+		// ErrNoDocuments means that the filter did not match any documents in the collection
+		if err == mongo.ErrNoDocuments {
+			log.Println(err)
+			return nil, err
+		}
+		log.Fatal(err)
+	}
+	fmt.Println(result)
+	return result, nil
+}
+
+
+
+
 func DbDelete(ID primitive.ObjectID, collection string) bool {
 	client, err, conContext := CreateDBconnection(Config.CONNECTION_STRING)
 	if err != nil {
@@ -76,7 +103,7 @@ func DbUpdate(data interface{}, collection string) bool {
 	defer client.Disconnect(conContext)
 	mongoClient := client.Database("meetup").Collection(collection)
 	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
-
+	fmt.Println(user.FreeTimes)
 	filter := bson.D{{"_id", user.Id}}
 	update := bson.D{{"$set", bson.D{{"freetimes", user.FreeTimes}}}}
 	result, err := mongoClient.UpdateOne(ctx, filter, update)

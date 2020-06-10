@@ -25,7 +25,8 @@ func Login(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	userResponse, err = DB.DbRead("email", usr.Email, "User")
+	//tmp, err := DB.DbRead("email", usr.Email, "User")
+	//userResponse = tmp.(map[string]string)
 	fmt.Println("compare pwd", comparePasswords(userResponse["password"], usr.Password))
 	c.JSON(200, gin.H{
 		"message": "Etfdal Ya Bashaaa!!",
@@ -53,15 +54,36 @@ func CheckTimeConflicts(list []FreeTime) bool {
 }
 
 func AddFreeTime(c *gin.Context) {
+	fmt.Println("######1")
 	var ft []FreeTime
 	err := c.ShouldBind(&ft)
+	fmt.Println("######2")
 	userId := c.Param("id")
 	fmt.Println("user Id:: "+userId)
+	fmt.Println("######3")
 	if err != nil{
 		log.Fatal(err)
 		c.JSON(500, gin.H{})
 	}
-	/*User, _ := DB.DbRead("id",userId,"User")
+
+	tmpUserID, _ := primitive.ObjectIDFromHex(userId)
+	usrTime, _ := DB.DbReadbyID("_id", tmpUserID,"User")
+
+	fmt.Println(usrTime)
+
+	/*usrTimeArray := []FreeTime
+	var currentFreeTime []FreeTime
+	json.Unmarshal([]byte(usrTimeArray["freetime"]), &currentFreeTime)
+	fmt.Println(reflect.TypeOf(currentFreeTime))
+	fmt.Println(reflect.TypeOf(ft))
+
+	//usrTimeArray = append(currentFreeTime, ft...)
+	if CheckTimeConflicts (currentFreeTime) != true {
+		c.JSON(69, gin.H{
+			"message": "Bara ya ibn el wes5a mn hna",
+		})
+	}*/
+	/*
 	fmt.Println(User["freetime"])
 	UserTime := strings.Split(User["freetime"],",")
 	var userTimesV3 []int
