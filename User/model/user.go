@@ -54,22 +54,18 @@ func CheckTimeConflicts(list []FreeTime) bool {
 }
 
 func AddFreeTime(c *gin.Context) {
-	fmt.Println("######1")
+//	fmt.Println("######1")
 	var ft []FreeTime
 	err := c.ShouldBind(&ft)
-	fmt.Println("######2")
 	userId := c.Param("id")
-	fmt.Println("user Id:: "+userId)
-	fmt.Println("######3")
 	if err != nil{
 		log.Fatal(err)
 		c.JSON(500, gin.H{})
 	}
 
 	tmpUserID, _ := primitive.ObjectIDFromHex(userId)
-	usrTime, _ := DB.DbReadbyID("_id", tmpUserID,"User")
-
-	fmt.Println(usrTime)
+	userID, _ := DB.DbReadbyID("_id", tmpUserID,"User")
+	fmt.Println(userID)
 
 	/*usrTimeArray := []FreeTime
 	var currentFreeTime []FreeTime
@@ -96,7 +92,7 @@ func AddFreeTime(c *gin.Context) {
 	}*/
 	var usr User
 	usr.Id, _ = primitive.ObjectIDFromHex(userId)
-	usr.FreeTimes = ft
+	/*usr.UserFreeTime = ft*/
 	DB.DbUpdate(usr,"User")
 	c.JSON(200, gin.H{
 		"message": "Shokrn ya setaq, ele mara el gya send nudes",
@@ -112,7 +108,7 @@ func AddPlaceInGroup(firstName string, lastName string) bool {
 func RegisterAccount(c *gin.Context) {
 	var usr User
 	err := c.ShouldBindJSON(&usr)
-	fmt.Println(usr)
+	//fmt.Println(usr)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return

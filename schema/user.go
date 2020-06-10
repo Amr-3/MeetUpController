@@ -8,6 +8,10 @@ type User struct {
 	Lastname  string             `json:"lastName,omitempty"`
 	Email     string             `json:"email,omitempty" binding:"required"`
 	Password  string             `json:"password,omitempty" binding:"required"`
-	FreeTimes []FreeTime         `json:"freetime,omitempty" `
+	UserFreeTime FreeTimesArr    `json:"freetimearr,omitempty" binding:"required"`
 	Groups    []string           `json:"groups,omitempty"`
+}
+
+type FreeTimesArr struct {
+		FreeTimes []FreeTime         `json:"freetime,omitempty"`
 }
