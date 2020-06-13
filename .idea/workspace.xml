@@ -36,10 +36,12 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="59a5b852-79ef-4f9c-9d42-546792037c9e" name="Default Changelist" comment="">
+    <list default="true" id="d0e04ce8-c9e6-41e9-86a9-ca77303c43c1" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DBConnections/DB_CURD.go" beforeDir="false" afterPath="$PROJECT_DIR$/DBConnections/DB_CURD.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DBConnections/DB_Connection.go" beforeDir="false" afterPath="$PROJECT_DIR$/DBConnections/DB_Connection.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/User/model/user.go" beforeDir="false" afterPath="$PROJECT_DIR$/User/model/user.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/schema/freeTimeStruct.go" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/schema/user.go" beforeDir="false" afterPath="$PROJECT_DIR$/schema/user.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -54,7 +56,7 @@
       </list>
     </option>
   </component>
-  <component name="GOROOT" path="C:\Users\Bazinga\go\go1.14.3" />
+  <component name="GOROOT" path="C:\Go" />
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
@@ -92,21 +94,13 @@
       <recent name="C:\Users\Bazinga\Documents\GitHub\MeetUp\config" />
     </key>
   </component>
-  <component name="RunManager" selected="Go Build.go build DB_CURD.go">
+  <component name="RunManager" selected="Go Build.go build main.go">
     <configuration default="true" type="GoApplicationRunConfiguration" factoryName="Go Application">
       <module name="MeetUp" />
       <working_directory value="$PROJECT_DIR$/" />
       <go_parameters value="-i" />
       <kind value="DIRECTORY" />
       <filePath value="$PROJECT_DIR$/" />
-      <directory value="$PROJECT_DIR$/" />
-      <method v="2" />
-    </configuration>
-    <configuration name="go build DB_CURD.go" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
-      <module name="MeetUp" />
-      <working_directory value="$PROJECT_DIR$/" />
-      <kind value="FILE" />
-      <filePath value="$PROJECT_DIR$/DBConnections/DB_CURD.go" />
       <directory value="$PROJECT_DIR$/" />
       <method v="2" />
     </configuration>
@@ -138,7 +132,6 @@
     <recent_temporary>
       <list>
         <item itemvalue="Go Build.go build main.go" />
-        <item itemvalue="Go Build.go build DB_CURD.go" />
         <item itemvalue="Go Build.go build user.go" />
       </list>
     </recent_temporary>
@@ -151,20 +144,19 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State>
-              <option name="COLUMN_ORDER" />
-            </State>
+            <State />
           </value>
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="552" y="178" key="#GOROOT" timestamp="1591818210116">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state x="2362" y="141" key="#GOROOT" timestamp="1591651160692">
+      <screen x="1920" y="0" width="1536" height="824" />
     </state>
     <state x="2362" y="141" key="#GOROOT/0.0.1536.824/1920.0.1536.824@1920.0.1536.824" timestamp="1591651160692" />
-    <state x="552" y="178" key="#GOROOT/0.0.1920.1040@0.0.1920.1040" timestamp="1591818210116" />
+    <state x="552" y="178" key="#GOROOT/0.0.1920.1040@0.0.1920.1040" timestamp="1591227114755" />
     <state x="552" y="178" key="#Go_Modules_(vgo)" timestamp="1590962134378">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -178,14 +170,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="728" y="323" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1591219503506" />
-    <state x="679" y="156" key="#go_build_DB_CURD.go" timestamp="1591823012031">
+    <state x="679" y="156" key="#go_build_user.go" timestamp="1591483006768">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="679" y="156" key="#go_build_DB_CURD.go/0.0.1920.1040@0.0.1920.1040" timestamp="1591823012031" />
-    <state x="679" y="156" key="#go_build_user.go" timestamp="1591821196883">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="679" y="156" key="#go_build_user.go/0.0.1920.1040@0.0.1920.1040" timestamp="1591821196883" />
+    <state x="679" y="156" key="#go_build_user.go/0.0.1920.1040@0.0.1920.1040" timestamp="1591483006768" />
     <state x="585" y="114" key="CommitChangelistDialog2" timestamp="1590962166686">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -194,30 +182,34 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="92" y="92" width="1736" height="856" key="DiffContextDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1590964555747" />
-    <state width="1877" height="282" key="GridCell.Tab.0.bottom" timestamp="1591823981261">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state width="1323" height="192" key="GridCell.Tab.0.bottom" timestamp="1592005986552">
+      <screen x="0" y="0" width="1366" height="768" />
     </state>
+    <state width="1323" height="192" key="GridCell.Tab.0.bottom/0.0.1366.768@0.0.1366.768" timestamp="1592005986552" />
     <state width="1493" height="250" key="GridCell.Tab.0.bottom/0.0.1536.824/1920.0.1536.824@1920.0.1536.824" timestamp="1591657270096" />
     <state width="1493" height="250" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1591660297702" />
-    <state width="1877" height="282" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1591823981261" />
-    <state width="1877" height="282" key="GridCell.Tab.0.center" timestamp="1591823981261">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state width="1877" height="282" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1591485208414" />
+    <state width="1323" height="192" key="GridCell.Tab.0.center" timestamp="1592005986551">
+      <screen x="0" y="0" width="1366" height="768" />
     </state>
+    <state width="1323" height="192" key="GridCell.Tab.0.center/0.0.1366.768@0.0.1366.768" timestamp="1592005986551" />
     <state width="1493" height="250" key="GridCell.Tab.0.center/0.0.1536.824/1920.0.1536.824@1920.0.1536.824" timestamp="1591657270096" />
     <state width="1493" height="250" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1591660297701" />
-    <state width="1877" height="282" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1591823981261" />
-    <state width="1877" height="282" key="GridCell.Tab.0.left" timestamp="1591823981260">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state width="1877" height="282" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1591485208414" />
+    <state width="1323" height="192" key="GridCell.Tab.0.left" timestamp="1592005986551">
+      <screen x="0" y="0" width="1366" height="768" />
     </state>
+    <state width="1323" height="192" key="GridCell.Tab.0.left/0.0.1366.768@0.0.1366.768" timestamp="1592005986551" />
     <state width="1493" height="250" key="GridCell.Tab.0.left/0.0.1536.824/1920.0.1536.824@1920.0.1536.824" timestamp="1591657270096" />
     <state width="1493" height="250" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1591660297701" />
-    <state width="1877" height="282" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1591823981260" />
-    <state width="1877" height="282" key="GridCell.Tab.0.right" timestamp="1591823981261">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state width="1877" height="282" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1591485208414" />
+    <state width="1323" height="192" key="GridCell.Tab.0.right" timestamp="1592005986552">
+      <screen x="0" y="0" width="1366" height="768" />
     </state>
+    <state width="1323" height="192" key="GridCell.Tab.0.right/0.0.1366.768@0.0.1366.768" timestamp="1592005986552" />
     <state width="1493" height="250" key="GridCell.Tab.0.right/0.0.1536.824/1920.0.1536.824@1920.0.1536.824" timestamp="1591657270096" />
     <state width="1493" height="250" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1591660297702" />
-    <state width="1877" height="282" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1591823981261" />
+    <state width="1877" height="282" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1591485208414" />
     <state width="1493" height="261" key="GridCell.Tab.1.bottom" timestamp="1591224622045">
       <screen x="1920" y="0" width="1536" height="824" />
     </state>
@@ -234,14 +226,26 @@
       <screen x="1920" y="0" width="1536" height="824" />
     </state>
     <state width="1493" height="261" key="GridCell.Tab.1.right/0.0.1536.824/1920.0.1536.824@1920.0.1536.824" timestamp="1591228916505" />
+    <state x="129" y="58" key="MergeDialog" timestamp="1591824646980">
+      <screen x="0" y="0" width="1366" height="768" />
+    </state>
+    <state x="129" y="58" key="MergeDialog/0.0.1366.768@0.0.1366.768" timestamp="1591824646980" />
     <state x="461" y="162" key="SettingsEditor" timestamp="1591479793535">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="461" y="162" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1591479793535" />
+    <state x="456" y="117" key="VcsDiffUtil.ChangesDialog" timestamp="1591824582354">
+      <screen x="0" y="0" width="1366" height="768" />
+    </state>
+    <state x="456" y="117" key="VcsDiffUtil.ChangesDialog/0.0.1366.768@0.0.1366.768" timestamp="1591824582354" />
     <state x="0" y="0" width="585" height="768" key="find.popup" timestamp="1590963863305">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
     <state x="0" y="0" width="585" height="768" key="find.popup/0.0.1366.768@0.0.1366.768" timestamp="1590963863305" />
+    <state x="463" y="96" key="git4idea.branch.GitSmartOperationDialog" timestamp="1591824600918">
+      <screen x="0" y="0" width="1366" height="768" />
+    </state>
+    <state x="463" y="96" key="git4idea.branch.GitSmartOperationDialog/0.0.1366.768@0.0.1366.768" timestamp="1591824600918" />
     <state width="600" height="428" key="javadoc.popup" timestamp="1591308753778">
       <screen x="1920" y="0" width="1536" height="824" />
     </state>
@@ -250,16 +254,5 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="623" y="225" width="672" height="678" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1591480909893" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
-          <url>file://$PROJECT_DIR$/User/model/user.go</url>
-          <line>2</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>
