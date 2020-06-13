@@ -8,7 +8,8 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-func CreateDBconnection(connectionString string) (*mongo.Client, error, context.Context) {
+//[Done] This function starts the connection with the mongoBD
+func CreateDBConnection(connectionString string) (*mongo.Client, error, context.Context) {
 	client, err := mongo.NewClient(options.Client().ApplyURI(connectionString))
 	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
 	err = client.Connect(ctx)

@@ -4,37 +4,43 @@ import (
 	. "../config"
 	. "../schema"
 	"context"
+	"fmt"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 	"log"
 	"time"
 )
 
+//[Done] This function inserts a new field in a collection
 func DbInsert(data interface{}, collection string) bool {
-	client, err, conContext := CreateDBconnection(Config.CONNECTION_STRING)
+	client, err, conContext := CreateDBConnection(Config.CONNECTION_STRING)
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer client.Disconnect(conContext)
-	/*mongoClient := client.Database("meetup").Collection(collection)
-	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)*/
-	//result, err := mongoClient.InsertOne(ctx, data)
+	mongoClient := client.Database("meetup").Collection(collection)
+	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
+	_, err = mongoClient.InsertOne(ctx, data)
 	if err != nil {
 		log.Fatal(err)
 		return false
 	}
 	return true
 }
+
+//[WIP] This function reads a filed in a collection using any other field value
+//[TODO] Make this function dynamic as the DbReadByID (not read the hole filed but only the desired object)
 func DbRead(key string, value string, collection string) (interface{}, error) {
 	var result interface{}
-	client, err, conContext := CreateDBconnection(Config.CONNECTION_STRING)
+	client, err, conContext := CreateDBConnection(Config.CONNECTION_STRING)
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer client.Disconnect(conContext)
 	mongoClient := client.Database("meetup").Collection(collection)
-	err = mongoClient.FindOne(context.TODO(), bson.D{{key, value}}).Decode(&result)
+	err = mongoClient.FindOne(context.Background(), bson.D{{key, value}}).Decode(&result)
 	if err != nil {
 		// ErrNoDocuments means that the filter did not match any documents in the collection
 		if err == mongo.ErrNoDocuments {
@@ -46,31 +52,46 @@ func DbRead(key string, value string, collection string) (interface{}, error) {
 	return result, nil
 }
 
-func DbReadbyID(key string, id primitive.ObjectID, collection string) (interface{}, error) {
-	client, err, conContext := CreateDBconnection(Config.CONNECTION_STRING)
+//[Done] This function reads a certain object inside a field in a collection using ID
+func DbReadByID(key string, id primitive.ObjectID, collection string) (interface{} ,error) {
+	client, err, conContext := CreateDBConnection(Config.CONNECTION_STRING)
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer client.Disconnect(conContext)
 	mongoClient := client.Database("meetup").Collection(collection)
-	result := FreeTimesArr{}
-	err = mongoClient.FindOne(context.TODO(), bson.D{{key, id}}).Decode(&result)
+
+	projection := bson.D{
+		{key, 1},
+	}
+
+	result,err := mongoClient.Find(context.Background(), bson.D{{"_id", id}},options.Find().SetProjection(projection))
+
 	if err != nil {
 		// ErrNoDocuments means that the filter did not match any documents in the collection
 		if err == mongo.ErrNoDocuments {
 			log.Println(err)
-			return nil, err
+			return  nil,err
 		}
 		log.Fatal(err)
 	}
-	return result, nil
+
+	for result.Next(context.Background()) {
+		var usr User
+		// Decode the document
+		if err := result.Decode(&usr); err != nil {
+			log.Fatal("cursor.Decode ERROR:", err)
+		}
+		return usr,nil
+	}
+	return nil,nil
+
 }
 
-
-
-
+//[Done?] This function deletes a field in a collection by it's ID
+//to be tested
 func DbDelete(ID primitive.ObjectID, collection string) bool {
-	client, err, conContext := CreateDBconnection(Config.CONNECTION_STRING)
+	client, err, conContext := CreateDBConnection(Config.CONNECTION_STRING)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -88,23 +109,23 @@ func DbDelete(ID primitive.ObjectID, collection string) bool {
 	return true
 }
 
-func DbUpdate(data interface{}, collection string) bool {
-	/*var user User
-	user = data.(User)
-	client, err, conContext := CreateDBconnection(Config.CONNECTION_STRING)
+//[Done] This function updates a certain object inside a field in a collection using ID
+func DbUpdate(prmUserID primitive.ObjectID, collection string,key string,data interface{}) bool {
+
+	client, err, conContext := CreateDBConnection(Config.CONNECTION_STRING)
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer client.Disconnect(conContext)
 	mongoClient := client.Database("meetup").Collection(collection)
 	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
-	filter := bson.D{{"_id", user.Id}}
-	update := bson.D{{"$set", bson.D{{"freetimes", user.FreeTimes}}}}
+	filter := bson.D{{"_id", prmUserID}}
+	update := bson.D{{"$set", bson.D{{key, data}}}}
 	result, err := mongoClient.UpdateOne(ctx, filter, update)
 	if err != nil {
 		log.Fatal(err)
 		return false
 	}
-	fmt.Println(result)*/
+	fmt.Println(result)
 	return true
 }
