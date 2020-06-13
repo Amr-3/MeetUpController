@@ -3,21 +3,28 @@ package schema
 import "go.mongodb.org/mongo-driver/bson/primitive"
 
 type User struct {
-	Id          primitive.ObjectID `json:"_id,omitempty"`
-	Firstname   string             `json:"firstname,omitempty"`
-	Lastname    string             `json:"lastName,omitempty"`
-	Email       string             `json:"email,omitempty" `
-	Password    string             `json:"password,omitempty" `
-	FreeTimeArr FreeTimesArr       `json:"freetimearr,omitempty"`
-	Groups      Groups             `json:"groups,omitempty"`
+	Id        primitive.ObjectID `json:"_id,omitempty"`
+	Firstname string             `json:"firstname,omitempty"`
+	Lastname  string             `json:"lastName,omitempty"`
+	Email     string             `json:"email,omitempty" `
+	Password  string             `json:"password,omitempty" `
+	FreeTimes FreeTimes          `json:"freetimes,omitempty"`
+	Groups    Groups             `json:"groups,omitempty"`
+	Friends   Friends
 }
 
-type FreeTimesArr struct {
+type Friends struct {
+	DisplayName []string
+	Id          []primitive.ObjectID
+}
+
+type FreeTimes struct {
 	FreeTime []FreeTime `json:"freetime,omitempty"`
 }
 
 type Groups struct {
-	Groups []string `json:"groups,omitempty"`
+	Groups []primitive.ObjectID
+	GroupName []string
 }
 
 type FreeTime struct {

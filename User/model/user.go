@@ -60,7 +60,7 @@ func CheckTimeConflicts(list []FreeTime) bool {
 //[WIP] This function adds new free times if possible
 //[TODO] return which times are causing conflict
 func AddFreeTime(c *gin.Context)  {
-	var newFreeTimeArr FreeTimesArr
+	var newFreeTimeArr FreeTimes
 	err := c.ShouldBind(&newFreeTimeArr)
 	userId := c.Param("id")
 	if err != nil {
@@ -73,7 +73,7 @@ func AddFreeTime(c *gin.Context)  {
 	// this code dynamically reads form a collection by key
 	tmpUser, _ := DB.DbReadByID("freetimearr", prmUserID, "User")
 	oldFreeTimeArr := tmpUser.(User).FreeTimeArr
-	var allFreeTimeArr FreeTimesArr
+	var allFreeTimeArr FreeTimes
 	allFreeTimeArr.FreeTime = append(newFreeTimeArr.FreeTime, oldFreeTimeArr.FreeTime...)
 	if CheckTimeConflicts(allFreeTimeArr.FreeTime) != true {
 		c.JSON(400, gin.H{
@@ -103,11 +103,13 @@ func AddPlaceInGroup(firstName string, lastName string) bool {
 func RegisterAccount(c *gin.Context) {
 	var usr User
 	err := c.ShouldBindJSON(&usr)
-	//fmt.Println(usr)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
+
+
+
 	usr.Password = getPwd(usr.Password)
 	DB.DbInsert(usr, "User")
 	c.JSON(200, gin.H{
