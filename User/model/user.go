@@ -3,13 +3,13 @@ package user
 import (
 	DB "../../DBConnections"
 	. "../../schema"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"golang.org/x/crypto/bcrypt"
 	"log"
 	"net/http"
 )
-
 
 //[WIP] This function checks for the user credentials
 //[TODO] return token
@@ -23,7 +23,7 @@ func Login(c *gin.Context) {
 	}
 	tmp, err := DB.DbRead("email", usr.Email, "User")
 	userResponse = tmp.(map[string]string)
-	if comparePasswords(userResponse["password"], usr.Password)!= true {
+	if comparePasswords(userResponse["password"], usr.Password) != true {
 		c.JSON(400, gin.H{
 			"message": "tare2 l salama enta",
 		})
@@ -59,7 +59,7 @@ func CheckTimeConflicts(list []FreeTime) bool {
 
 //[WIP] This function adds new free times if possible
 //[TODO] return which times are causing conflict
-func AddFreeTime(c *gin.Context)  {
+func AddFreeTime(c *gin.Context) {
 	var newFreeTimeArr FreeTimes
 	err := c.ShouldBind(&newFreeTimeArr)
 	userId := c.Param("id")
@@ -72,7 +72,7 @@ func AddFreeTime(c *gin.Context)  {
 
 	// this code dynamically reads form a collection by key
 	tmpUser, _ := DB.DbReadByID("freetimearr", prmUserID, "User")
-	oldFreeTimeArr := tmpUser.(User).FreeTimeArr
+	oldFreeTimeArr := tmpUser.(User).FreeTimes
 	var allFreeTimeArr FreeTimes
 	allFreeTimeArr.FreeTime = append(newFreeTimeArr.FreeTime, oldFreeTimeArr.FreeTime...)
 	if CheckTimeConflicts(allFreeTimeArr.FreeTime) != true {
@@ -98,7 +98,7 @@ func AddPlaceInGroup(firstName string, lastName string) bool {
 	return true
 }
 
-//[WIP] Registers new account
+//[WIP] Registers new account with unique email
 //[TODO] Check that all the mandatory fields are filled with appropriate data
 func RegisterAccount(c *gin.Context) {
 	var usr User
@@ -108,12 +108,58 @@ func RegisterAccount(c *gin.Context) {
 		return
 	}
 
-
+	//check if the email is unique
+	found, err := DB.DbRead("email", usr.Email, "User")
+	if found != nil {
+		c.JSON(402, gin.H{
+			"message": "This email is already taked ro7 shoflak kalba",
+		})
+		return
+	}
 
 	usr.Password = getPwd(usr.Password)
 	DB.DbInsert(usr, "User")
 	c.JSON(200, gin.H{
 		"message": usr,
+	})
+}
+
+//[] Adding a friend in the friends list
+func AddFriend(c *gin.Context) {
+	var emailUser User
+	err := c.ShouldBind(&emailUser)
+	if err != nil {
+		log.Fatal(err)
+		c.JSON(500, gin.H{})
+	}
+
+	userId := c.Param("id")
+
+	//get the friend user data
+	var friendUser map[string]string
+	interFriendUser, err := DB.DbRead("email", emailUser.Email, "User")
+	friendUser = interFriendUser.(map[string]string)
+	fmt.Println("3aaaaaa1")
+	//get the old list of friends
+	id, err := primitive.ObjectIDFromHex(userId)
+	currentFriends, err := DB.DbReadByID("friends",id,"User")
+	newFriends := currentFriends.(User)
+	fmt.Println("3aaaaaa2")
+	//add the new friend data
+	newFriends.Friends.DisplayName=append(newFriends.Friends.DisplayName,friendUser["firstname"]+" "+friendUser["lastname"])
+	tmpid, err:=primitive.ObjectIDFromHex(friendUser["_id"])
+	newFriends.Friends.Id= append(newFriends.Friends.Id,tmpid)
+	fmt.Println("3aaaaaa3")
+	//insert the new friend list in the user object
+	done :=DB.DbUpdate(id,"User","friends",newFriends.Friends)
+	if done == false{
+		c.JSON(404, gin.H{
+			"message": "bos fe 7aga 3'alat 7asalet bs ana msh 3rf eh lessa",
+		})
+		return
+	}
+	c.JSON(200, gin.H{
+		"message": "mabrook 3alek l friend l gdeed 3o2bal kol mara",
 	})
 }
 

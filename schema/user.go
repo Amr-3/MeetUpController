@@ -3,14 +3,14 @@ package schema
 import "go.mongodb.org/mongo-driver/bson/primitive"
 
 type User struct {
-	Id        primitive.ObjectID `json:"_id,omitempty"`
+	ID        primitive.ObjectID `json:"_id,omitempty" bson:"_id,omitempty"`
 	Firstname string             `json:"firstname,omitempty"`
 	Lastname  string             `json:"lastName,omitempty"`
 	Email     string             `json:"email,omitempty" `
 	Password  string             `json:"password,omitempty" `
 	FreeTimes FreeTimes          `json:"freetimes,omitempty"`
 	Groups    Groups             `json:"groups,omitempty"`
-	Friends   Friends
+	Friends   Friends            `json:"friends,omitempty"`
 }
 
 type Friends struct {
