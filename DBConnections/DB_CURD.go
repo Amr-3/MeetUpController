@@ -4,7 +4,7 @@ import (
 	. "../config"
 	. "../schema"
 	"context"
-	"fmt"
+	. "fmt"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -30,17 +30,28 @@ func DbInsert(data interface{}, collection string) bool {
 	return true
 }
 
-//[WIP] This function reads a filed in a collection using any other field value
-//[TODO] Make this function dynamic as the DbReadByID (not read the hole filed but only the desired object)
-func DbRead(key string, value string, collection string) (interface{}, error) {
-	var result interface{}
+//[WIP] This function reads one or more value in a field using any other value
+//[TODO] fix the find by ID problem
+func DbRead(findByKey string, findByValue string, collection string, readKey ...string) (interface{}, error) {
+	Println(findByKey+" "+findByValue+" / "+readKey[0])
 	client, err, conContext := CreateDBConnection(Config.CONNECTION_STRING)
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer client.Disconnect(conContext)
 	mongoClient := client.Database("meetup").Collection(collection)
-	err = mongoClient.FindOne(context.Background(), bson.D{{key, value}}).Decode(&result)
+
+	var projection bson.D
+	for _, projKey := range readKey {
+		projection = append(projection, bson.E{projKey, 1})
+	}
+	Println("3aaaaa")
+	Println(projection)
+
+	result, err := mongoClient.Find(context.Background(), bson.D{{findByKey, findByValue}}, options.Find().SetProjection(projection))
+	Println("3aaaaa")
+	Println(result)
+
 	if err != nil {
 		// ErrNoDocuments means that the filter did not match any documents in the collection
 		if err == mongo.ErrNoDocuments {
@@ -49,11 +60,32 @@ func DbRead(key string, value string, collection string) (interface{}, error) {
 		}
 		log.Fatal(err)
 	}
-	return result, nil
+
+	for result.Next(context.Background()) {
+		Println("da5al gamed")
+		var usr User
+		// Decode the document
+		if err := result.Decode(&usr); err != nil {
+			log.Fatal("cursor.Decode ERROR:", err)
+		}
+		return usr, nil
+	}
+	return nil, nil
 }
 
 //[Done] This function reads a certain object inside a field in a collection using ID
-func DbReadByID(key string, id primitive.ObjectID, collection string) (interface{} ,error) {
+func DbReadByID(key string, id primitive.ObjectID, collection string) (interface{}, error) {
+	tmp := bson.D{{"_id", id}}
+	Println("3aaaaaa")
+	Println(tmp)
+
+	/*tmpID := id.String()
+	result, err := DbRead("_id",tmpID , collection, key)
+	if err!=nil{
+		return nil,err
+	}
+	return result,nil*/
+
 	client, err, conContext := CreateDBConnection(Config.CONNECTION_STRING)
 	if err != nil {
 		log.Fatal(err)
@@ -110,7 +142,7 @@ func DbDelete(ID primitive.ObjectID, collection string) bool {
 }
 
 //[Done] This function updates a certain object inside a field in a collection using ID
-func DbUpdate(prmUserID primitive.ObjectID, collection string,key string,data interface{}) bool {
+func DbUpdate(prmUserID primitive.ObjectID, collection string, key string, data interface{}) bool {
 
 	client, err, conContext := CreateDBConnection(Config.CONNECTION_STRING)
 	if err != nil {
@@ -126,6 +158,6 @@ func DbUpdate(prmUserID primitive.ObjectID, collection string,key string,data in
 		log.Fatal(err)
 		return false
 	}
-	fmt.Println(result)
+	Println(result)
 	return true
 }

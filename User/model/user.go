@@ -3,8 +3,9 @@ package user
 import (
 	DB "../../DBConnections"
 	. "../../schema"
-	"fmt"
+	//"fmt"
 	"github.com/gin-gonic/gin"
+	//"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"golang.org/x/crypto/bcrypt"
 	"log"
@@ -15,15 +16,14 @@ import (
 //[TODO] return token
 func Login(c *gin.Context) {
 	var usr User
-	var userResponse map[string]string
 	err := c.ShouldBindJSON(&usr)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	tmp, err := DB.DbRead("email", usr.Email, "User")
-	userResponse = tmp.(map[string]string)
-	if comparePasswords(userResponse["password"], usr.Password) != true {
+	tmp, err := DB.DbRead("email", usr.Email, "User","password")
+	userResponse := tmp.(User)
+	if comparePasswords(userResponse.Password, usr.Password) != true {
 		c.JSON(400, gin.H{
 			"message": "tare2 l salama enta",
 		})
@@ -109,7 +109,7 @@ func RegisterAccount(c *gin.Context) {
 	}
 
 	//check if the email is unique
-	found, err := DB.DbRead("email", usr.Email, "User")
+	found, err := DB.DbRead("email", usr.Email, "User","email")
 	if found != nil {
 		c.JSON(402, gin.H{
 			"message": "This email is already taked ro7 shoflak kalba",
@@ -126,6 +126,9 @@ func RegisterAccount(c *gin.Context) {
 
 //[] Adding a friend in the friends list
 func AddFriend(c *gin.Context) {
+
+
+
 	var emailUser User
 	err := c.ShouldBind(&emailUser)
 	if err != nil {
@@ -136,20 +139,18 @@ func AddFriend(c *gin.Context) {
 	userId := c.Param("id")
 
 	//get the friend user data
-	var friendUser map[string]string
-	interFriendUser, err := DB.DbRead("email", emailUser.Email, "User")
-	friendUser = interFriendUser.(map[string]string)
-	fmt.Println("3aaaaaa1")
+	interFriendUser, err := DB.DbRead("email", emailUser.Email, "User","firstname","lastname","_id")
+	friendUser := interFriendUser.(User)
+
 	//get the old list of friends
 	id, err := primitive.ObjectIDFromHex(userId)
 	currentFriends, err := DB.DbReadByID("friends",id,"User")
 	newFriends := currentFriends.(User)
-	fmt.Println("3aaaaaa2")
+
 	//add the new friend data
-	newFriends.Friends.DisplayName=append(newFriends.Friends.DisplayName,friendUser["firstname"]+" "+friendUser["lastname"])
-	tmpid, err:=primitive.ObjectIDFromHex(friendUser["_id"])
-	newFriends.Friends.Id= append(newFriends.Friends.Id,tmpid)
-	fmt.Println("3aaaaaa3")
+	newFriends.Friends.DisplayName=append(newFriends.Friends.DisplayName,friendUser.Firstname+" "+friendUser.Lastname)
+	newFriends.Friends.Id= append(newFriends.Friends.Id,friendUser.ID)
+
 	//insert the new friend list in the user object
 	done :=DB.DbUpdate(id,"User","friends",newFriends.Friends)
 	if done == false{
@@ -158,6 +159,7 @@ func AddFriend(c *gin.Context) {
 		})
 		return
 	}
+
 	c.JSON(200, gin.H{
 		"message": "mabrook 3alek l friend l gdeed 3o2bal kol mara",
 	})
