@@ -30,10 +30,8 @@ func DbInsert(data interface{}, collection string) bool {
 	return true
 }
 
-//[WIP] This function reads one or more value in a field using any other value
-//[TODO] fix the find by ID problem
-func DbRead(findByKey string, findByValue string, collection string, readKey ...string) (interface{}, error) {
-	Println(findByKey+" "+findByValue+" / "+readKey[0])
+//[Done] This function reads one or more value in a field using any other value
+func DbRead(findByKey string, findByValue interface{}, collection string, readKey ...string) (interface{}, error) {
 	client, err, conContext := CreateDBConnection(Config.CONNECTION_STRING)
 	if err != nil {
 		log.Fatal(err)
@@ -45,12 +43,8 @@ func DbRead(findByKey string, findByValue string, collection string, readKey ...
 	for _, projKey := range readKey {
 		projection = append(projection, bson.E{projKey, 1})
 	}
-	Println("3aaaaa")
-	Println(projection)
 
 	result, err := mongoClient.Find(context.Background(), bson.D{{findByKey, findByValue}}, options.Find().SetProjection(projection))
-	Println("3aaaaa")
-	Println(result)
 
 	if err != nil {
 		// ErrNoDocuments means that the filter did not match any documents in the collection
@@ -62,7 +56,6 @@ func DbRead(findByKey string, findByValue string, collection string, readKey ...
 	}
 
 	for result.Next(context.Background()) {
-		Println("da5al gamed")
 		var usr User
 		// Decode the document
 		if err := result.Decode(&usr); err != nil {
@@ -71,53 +64,6 @@ func DbRead(findByKey string, findByValue string, collection string, readKey ...
 		return usr, nil
 	}
 	return nil, nil
-}
-
-//[Done] This function reads a certain object inside a field in a collection using ID
-func DbReadByID(key string, id primitive.ObjectID, collection string) (interface{}, error) {
-	tmp := bson.D{{"_id", id}}
-	Println("3aaaaaa")
-	Println(tmp)
-
-	/*tmpID := id.String()
-	result, err := DbRead("_id",tmpID , collection, key)
-	if err!=nil{
-		return nil,err
-	}
-	return result,nil*/
-
-	client, err, conContext := CreateDBConnection(Config.CONNECTION_STRING)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer client.Disconnect(conContext)
-	mongoClient := client.Database("meetup").Collection(collection)
-
-	projection := bson.D{
-		{key, 1},
-	}
-
-	result,err := mongoClient.Find(context.Background(), bson.D{{"_id", id}},options.Find().SetProjection(projection))
-
-	if err != nil {
-		// ErrNoDocuments means that the filter did not match any documents in the collection
-		if err == mongo.ErrNoDocuments {
-			log.Println(err)
-			return  nil,err
-		}
-		log.Fatal(err)
-	}
-
-	for result.Next(context.Background()) {
-		var usr User
-		// Decode the document
-		if err := result.Decode(&usr); err != nil {
-			log.Fatal("cursor.Decode ERROR:", err)
-		}
-		return usr,nil
-	}
-	return nil,nil
-
 }
 
 //[Done?] This function deletes a field in a collection by it's ID

@@ -3,9 +3,7 @@ package user
 import (
 	DB "../../DBConnections"
 	. "../../schema"
-	//"fmt"
 	"github.com/gin-gonic/gin"
-	//"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"golang.org/x/crypto/bcrypt"
 	"log"
@@ -21,7 +19,7 @@ func Login(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	tmp, err := DB.DbRead("email", usr.Email, "User","password")
+	tmp, err := DB.DbRead("email", usr.Email, "User", "password")
 	userResponse := tmp.(User)
 	if comparePasswords(userResponse.Password, usr.Password) != true {
 		c.JSON(400, gin.H{
@@ -71,7 +69,7 @@ func AddFreeTime(c *gin.Context) {
 	prmUserID, _ := primitive.ObjectIDFromHex(userId)
 
 	// this code dynamically reads form a collection by key
-	tmpUser, _ := DB.DbReadByID("freetimearr", prmUserID, "User")
+	tmpUser, _ := DB.DbRead("_id", prmUserID, "User", "freetimes")
 	oldFreeTimeArr := tmpUser.(User).FreeTimes
 	var allFreeTimeArr FreeTimes
 	allFreeTimeArr.FreeTime = append(newFreeTimeArr.FreeTime, oldFreeTimeArr.FreeTime...)
@@ -82,8 +80,8 @@ func AddFreeTime(c *gin.Context) {
 		return
 	}
 
-	// inserting the freetimearr object into an already found user
-	DB.DbUpdate(prmUserID, "User", "freetimearr", allFreeTimeArr)
+	// inserting the freetimes object into an already found user
+	DB.DbUpdate(prmUserID, "User", "freetimes", allFreeTimeArr)
 	c.JSON(200, gin.H{
 		"message": "Shokrn ya sadeq, ele mara el gya send nudes",
 	})
@@ -109,7 +107,7 @@ func RegisterAccount(c *gin.Context) {
 	}
 
 	//check if the email is unique
-	found, err := DB.DbRead("email", usr.Email, "User","email")
+	found, err := DB.DbRead("email", usr.Email, "User", "email")
 	if found != nil {
 		c.JSON(402, gin.H{
 			"message": "This email is already taked ro7 shoflak kalba",
@@ -124,10 +122,8 @@ func RegisterAccount(c *gin.Context) {
 	})
 }
 
-//[] Adding a friend in the friends list
+//[Done] Adding a friend in the friends list
 func AddFriend(c *gin.Context) {
-
-
 
 	var emailUser User
 	err := c.ShouldBind(&emailUser)
@@ -139,21 +135,36 @@ func AddFriend(c *gin.Context) {
 	userId := c.Param("id")
 
 	//get the friend user data
-	interFriendUser, err := DB.DbRead("email", emailUser.Email, "User","firstname","lastname","_id")
+	interFriendUser, err := DB.DbRead("email", emailUser.Email, "User", "firstname", "lastname", "_id")
+	if interFriendUser == nil {
+		c.JSON(404, gin.H{
+			"message": "Not Found",
+		})
+		return
+	}
 	friendUser := interFriendUser.(User)
 
 	//get the old list of friends
 	id, err := primitive.ObjectIDFromHex(userId)
-	currentFriends, err := DB.DbReadByID("friends",id,"User")
+	currentFriends, err := DB.DbRead("_id", id, "User", "friends")
 	newFriends := currentFriends.(User)
 
+	//check if friend already exists
+	for _, friendId := range newFriends.Friends.Id {
+		if friendId == friendUser.ID {
+			c.JSON(400, gin.H{
+				"message": "Mawgod ya Bershaama",
+			})
+			return
+		}
+	}
 	//add the new friend data
-	newFriends.Friends.DisplayName=append(newFriends.Friends.DisplayName,friendUser.Firstname+" "+friendUser.Lastname)
-	newFriends.Friends.Id= append(newFriends.Friends.Id,friendUser.ID)
+	newFriends.Friends.DisplayName = append(newFriends.Friends.DisplayName, friendUser.Firstname+" "+friendUser.Lastname)
+	newFriends.Friends.Id = append(newFriends.Friends.Id, friendUser.ID)
 
 	//insert the new friend list in the user object
-	done :=DB.DbUpdate(id,"User","friends",newFriends.Friends)
-	if done == false{
+	done := DB.DbUpdate(id, "User", "friends", newFriends.Friends)
+	if done == false {
 		c.JSON(404, gin.H{
 			"message": "bos fe 7aga 3'alat 7asalet bs ana msh 3rf eh lessa",
 		})
