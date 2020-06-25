@@ -1,13 +1,14 @@
 package user
 
 import (
+	"log"
+	"net/http"
+
 	DB "../../DBConnections"
 	. "../../schema"
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"golang.org/x/crypto/bcrypt"
-	"log"
-	"net/http"
 )
 
 //[WIP] This function checks for the user credentials
@@ -32,8 +33,33 @@ func Login(c *gin.Context) {
 	})
 }
 
-func CreateGroup(firstName string, lastName string) bool {
-	return true
+func CreateGroup(c *gin.Context) {
+	var newGroup Group
+	err := c.ShouldBind(&newGroup)
+	userId := c.Param("id")
+	if err != nil {
+		log.Fatal(err)
+		c.JSON(500, gin.H{})
+	}
+	newGroup.AdminUser, err = primitive.ObjectIDFromHex(userId)
+
+	if err != nil {
+		log.Fatal(err)
+		c.JSON(500, gin.H{})
+	}
+
+	newGroup.Users.Users = append(newGroup.Users.Users, newGroup.AdminUser)
+	doneFlag := DB.DbInsert(newGroup, "Group")
+
+	if !doneFlag {
+		c.JSON(500, gin.H{"message": "Wrong Hole"})
+		return
+	}
+	c.JSON(200, gin.H{
+		"message": "Group Added",
+	})
+	return
+
 }
 
 //[WIP] This function checks for conflict between time periods

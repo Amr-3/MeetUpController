@@ -14,7 +14,7 @@ type User struct {
 }
 
 type Friends struct {
-	DisplayName []string `json:"displayname,omitempty"`
+	DisplayName []string             `json:"displayname,omitempty"`
 	Id          []primitive.ObjectID `json:"id,omitempty"`
 }
 
@@ -23,8 +23,8 @@ type FreeTimes struct {
 }
 
 type Groups struct {
-	Groups []primitive.ObjectID `json:"groups,omitempty"`
-	GroupName []string `json:"groupsname,omitempty"`
+	Id   []primitive.ObjectID `json:"groups,omitempty"`
+	Name []string             `json:"groupsname,omitempty"`
 }
 
 type FreeTime struct {
