@@ -39,6 +39,7 @@ jobs:
 
   - script: |
       go version
+      go mod init
       cd ./apis/trips
       go get -v -t -d ./...
       if [ -f Gopkg.toml ]; then
