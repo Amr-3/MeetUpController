@@ -42,12 +42,12 @@ jobs:
       go mod init
       cd ./apis/trips
       go get -v -t -d ./...
-      go get github.com/tkanos/gonfig
-      go get go.mongodb.org/mongo-driver/mongo/options
-      go get go.mongodb.org/mongo-driver/bson/primitive
-      go get go.mongodb.org/mongo-driver/mongo
-      go get go.mongodb.org/mongo-driver/mongo/options
-      go get golang.org/x/crypto/bcrypt
+      go get -u github.com/tkanos/gonfig
+      go get -u go.mongodb.org/mongo-driver/mongo/options
+      go get -u go.mongodb.org/mongo-driver/bson/primitive
+      go get -u go.mongodb.org/mongo-driver/mongo
+      go get -u go.mongodb.org/mongo-driver/mongo/options
+      go get -u golang.org/x/crypto/bcrypt
       if [ -f Gopkg.toml ]; then
           curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
           dep ensure
