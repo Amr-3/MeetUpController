@@ -3,8 +3,12 @@
 # Add steps that test, save build artifacts, deploy, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/go
 
+
 trigger:
-- azuretest2
+  branches:
+    include:
+    - azuretest2
+
 
 pool:
   vmImage: 'ubuntu-latest'
@@ -16,7 +20,7 @@ variables:
   modulePath: '$(GOPATH)/src/github.com/$(build.repository.name)' # Path to the module's code
 
 jobs:
-- job: Build
+- job: BuildAndTest
   timeoutInMinutes: 5
   steps:
   - script: |
@@ -29,23 +33,27 @@ jobs:
       echo '##vso[task.prependpath]$(GOBIN)'
       echo '##vso[task.prependpath]$(GOROOT)/bin'
     displayName: 'Set up the Go workspace'
-
   - task: GoTool@0
     inputs:
-      version: '1.13'
+      version: '1.14'
 
   - script: |
       go version
-      ls -l
-      ls $GOPATH -l
-      ls $GOROOT -l
-      go get -u ./...
-      #go get -v -t -d ./...
-      #if [ -f Gopkg.toml ]; then
-      #    curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
-      #    dep ensure
-      #fi
-      #go run main.go
-      #go build -v .
+      cd ./apis/trips
+      go get -v -t -d ./...
+      if [ -f Gopkg.toml ]; then
+          curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
+          dep ensure
+      fi
+      go build -v .
+
     workingDirectory: '$(modulePath)'
     displayName: 'Get dependencies, then build'
+
+  - task: Go@0
+    inputs:
+      command: 'test'
+      arguments: '-run Unit'
+      workingDirectory: '$(modulePath)/apis/trips/tripsgo'
+    displayName: 'Unit test'
+
