@@ -50,10 +50,3 @@ jobs:
     workingDirectory: '$(modulePath)'
     displayName: 'Get dependencies, then build'
 
-  - task: Go@0
-    inputs:
-      command: 'test'
-      arguments: '-run Unit'
-      workingDirectory: '$(modulePath)/apis/trips/tripsgo'
-    displayName: 'Unit test'
-
