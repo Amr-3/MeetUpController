@@ -31,7 +31,7 @@ steps:
   inputs:
     version: '1.14'
 - script:
-    cd ./MeetUp 
+    cd ./MeetUp
     pwd
     ls
 #- script: |
