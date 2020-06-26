@@ -37,7 +37,7 @@ jobs:
   - script: |
       go version
       ls -l
-      ls $GOPATH -l
+      ls -r $GOPATH -l
       ls $GOROOT -l
       go get -v -t -d ./...
       if [ -f Gopkg.toml ]; then
