@@ -39,6 +39,7 @@ jobs:
       ls -l
       ls $GOPATH -l
       ls $GOROOT -l
+      go get -u ./...
       #go get -v -t -d ./...
       #if [ -f Gopkg.toml ]; then
       #    curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
