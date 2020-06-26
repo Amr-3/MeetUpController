@@ -30,7 +30,8 @@ steps:
 - task: GoTool@0
   inputs:
     version: '1.14'
-- script: 
+- script:
+    cd ./MeetUp 
     pwd
     ls
 #- script: |
