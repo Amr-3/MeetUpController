@@ -30,7 +30,9 @@ steps:
 - task: GoTool@0
   inputs:
     version: '1.14'
-
+- script: 
+    pwd
+    ls
 #- script: |
 #    go version
 #    go get -v -t -d ./...
