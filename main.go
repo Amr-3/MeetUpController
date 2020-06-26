@@ -1,8 +1,8 @@
 package main
 
 import (
-	. "./User/model"
-	. "./config"
+	. "MeetUp/User/model"
+	. "MeetUp/config"
 	"github.com/gin-gonic/gin"
 )
 

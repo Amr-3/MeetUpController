@@ -1,8 +1,8 @@
 package DBConnections
 
 import (
-	. "../config"
-	. "../schema"
+	. "Meetup/config"
+	. "MeetUp/schema"
 	"context"
 	. "fmt"
 	"go.mongodb.org/mongo-driver/bson"
