@@ -39,6 +39,6 @@ steps:
     #    dep ensure
     #fi
     go run main.go
-    go build -v .
+    #go build -v .
   workingDirectory: '$(modulePath)'
   displayName: 'Get dependencies, then build'
