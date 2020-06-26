@@ -37,14 +37,14 @@ jobs:
   - script: |
       go version
       ls -l
-      ls -r $GOPATH -l
+      ls $GOPATH -l
       ls $GOROOT -l
-      go get -v -t -d ./...
-      if [ -f Gopkg.toml ]; then
-          curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
-          dep ensure
-      fi
+      #go get -v -t -d ./...
+      #if [ -f Gopkg.toml ]; then
+      #    curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
+      #    dep ensure
+      #fi
       #go run main.go
-      go build -v .
+      #go build -v .
     workingDirectory: '$(modulePath)'
     displayName: 'Get dependencies, then build'
