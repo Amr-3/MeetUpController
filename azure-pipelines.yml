@@ -15,7 +15,7 @@ pool:
 
 variables:
   GOBIN:  '$(GOPATH)/bin' # Go binaries path
-  GOROOT: '/usr/local/go1.11' # Go installation path
+  GOROOT: '/usr/local/go1.14.3' # Go installation path
   GOPATH: '$(system.defaultWorkingDirectory)/gopath' # Go workspace path
   modulePath: '$(GOPATH)/src/github.com/$(build.repository.name)' # Path to the module's code
 
@@ -35,13 +35,19 @@ jobs:
     displayName: 'Set up the Go workspace'
   - task: GoTool@0
     inputs:
-      version: '1.14'
+      version: '1.14.3'
 
   - script: |
       go version
       go mod init
       cd ./apis/trips
       go get -v -t -d ./...
+      go get github.com/tkanos/gonfig
+      go get go.mongodb.org/mongo-driver/mongo/options
+      go get go.mongodb.org/mongo-driver/bson/primitive
+      go get go.mongodb.org/mongo-driver/mongo
+      go get go.mongodb.org/mongo-driver/mongo/options
+      go get golang.org/x/crypto/bcrypt
       if [ -f Gopkg.toml ]; then
           curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
           dep ensure
