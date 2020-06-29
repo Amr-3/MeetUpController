@@ -53,3 +53,20 @@ jobs:
     workingDirectory: '$(modulePath)'
     displayName: 'Get dependencies, then build'
 
+  - task: DockerCompose@0
+    inputs:
+      containerregistrytype: 'Azure Container Registry'
+      azureSubscription: 'Azure for Students(a4d1a12e-9259-498c-94b0-46024c2a2913)'
+      azureContainerRegistry: '{"loginServer":"meetup1test.azurecr.io", "id" : "/subscriptions/a4d1a12e-9259-498c-94b0-46024c2a2913/resourceGroups/Test-vms/providers/Microsoft.ContainerRegistry/registries/meetup1test"}'
+      dockerComposeFile: '**/docker-compose.yml'
+      action: 'Build services'
+      includeLatestTag: true
+
+  - task: DockerCompose@0
+    inputs:
+      containerregistrytype: 'Azure Container Registry'
+      azureSubscription: 'Azure for Students(a4d1a12e-9259-498c-94b0-46024c2a2913)'
+      azureContainerRegistry: '{"loginServer":"meetup1test.azurecr.io", "id" : "/subscriptions/a4d1a12e-9259-498c-94b0-46024c2a2913/resourceGroups/Test-vms/providers/Microsoft.ContainerRegistry/registries/meetup1test"}'
+      dockerComposeFile: '**/docker-compose.yml'
+      action: 'Push services'
+      includeLatestTag: true
