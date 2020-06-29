@@ -39,7 +39,6 @@ jobs:
 
   - script: |
       go version
-      cp -R ./ $GOPATH
       go mod init
       go get -v -t -d ./...
       go get -u github.com/tkanos/gonfig
@@ -53,6 +52,7 @@ jobs:
           dep ensure
       fi
       #go build -v .
+      ls $GOPATH/src -l
       go run main.go
 
     workingDirectory: '$(modulePath)'
