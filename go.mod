@@ -1,6 +1,6 @@
 module github.com/AmrMorsy2/MeetUp
 
-go 1.2.3
+go 1.14.3
 
 require (
       github.com/tkanos/gonfig
