@@ -39,8 +39,8 @@ jobs:
 
   - script: |
       go version
+      cp -R ./ $GOPATH
       go mod init
-      ls -l
       go get -v -t -d ./...
       go get -u github.com/tkanos/gonfig
       go get -u go.mongodb.org/mongo-driver/mongo/options
