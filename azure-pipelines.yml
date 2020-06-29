@@ -40,7 +40,7 @@ jobs:
   - script: |
       go version
       go mod init
-      cd ./apis/trips
+      ls -l
       go get -v -t -d ./...
       go get -u github.com/tkanos/gonfig
       go get -u go.mongodb.org/mongo-driver/mongo/options
