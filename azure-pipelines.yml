@@ -17,8 +17,8 @@ variables:
   GOBIN:  '$(GOPATH)/bin' # Go binaries path
   GOROOT: '/usr/local/go1.14.3' # Go installation path
   GOPATH: '$(system.defaultWorkingDirectory)/gopath' # Go workspace path
-  modulePath: '$(GOPATH)/src/github.com/$(build.repository.name)' # Path to the module's code
-
+  #modulePath: '$(GOPATH)/src/github.com/$(build.repository.name)' # Path to the module's code
+  
 jobs:
 - job: BuildAndTest
   timeoutInMinutes: 5
@@ -41,12 +41,7 @@ jobs:
       go version
       go mod init
       go get -v -t -d ./...
-      go get -u github.com/tkanos/gonfig
-      go get -u go.mongodb.org/mongo-driver/mongo/options
-      go get -u go.mongodb.org/mongo-driver/bson/primitive
-      go get -u go.mongodb.org/mongo-driver/mongo
-      go get -u go.mongodb.org/mongo-driver/mongo/options
-      go get -u golang.org/x/crypto/bcrypt
+      
       if [ -f Gopkg.toml ]; then
           curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
           dep ensure
