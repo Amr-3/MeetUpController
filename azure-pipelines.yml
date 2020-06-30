@@ -49,14 +49,15 @@ jobs:
       #go build -v $modulePath
       #ls -R -l $modulePath
       #go run main.go
+      ls -R -l '$modulePath'
     workingDirectory: '$(modulePath)'
     displayName: 'Get dependencies, then build'
+      
   - task: Go@0
     inputs:
       command: 'build'
       workingDirectory: '$modulePath'
-  - script: |
-      ls -R -l '$modulePath'
+  
 
 #  - task: Docker@2
 #    inputs:
