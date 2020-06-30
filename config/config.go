@@ -16,7 +16,7 @@ var Config Configuration
 
 func LoadConfig() {
 	Config = Configuration{}
-	err := gonfig.GetConf("./config/config.json", &Config)
+	err := gonfig.GetConf("/config/config.json", &Config)
 	Config.CONNECTION_STRING = "mongodb+srv://" + Config.DB_USERNAME + ":" + Config.DB_PASSWORD + "@test-cluster-dvxai.mongodb.net/meetup"
 	if err != nil {
 		log.Fatal(err)
