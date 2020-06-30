@@ -47,14 +47,14 @@ jobs:
           dep ensure
       fi
       go build -v .
-      #ls $GOPATH/src -l
+      ls $GOPATH/src -l
       #go run main.go
 
     workingDirectory: '$(modulePath)'
     displayName: 'Get dependencies, then build'
-  - task: Docker@2
-    inputs:
-      containerRegistry: 'docker-test-acr'
-      repository: 'meetup-repos'
-      command: 'buildAndPush'
-      Dockerfile: '**/Dockerfile'
+#  - task: Docker@2
+#    inputs:
+#      containerRegistry: 'docker-test-acr'
+#      repository: 'meetup-repos'
+#      command: 'buildAndPush'
+#      Dockerfile: '**/Dockerfile'
