@@ -46,19 +46,14 @@ jobs:
           curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
           dep ensure
       fi
-      #go build -v $(modulePath)
+      cd $(modulePath)
+      go build -v ./
       #ls -R -l $modulePath
       #go run main.go
       ls -R -l $(modulePath)
     workingDirectory: '$(modulePath)'
     displayName: 'Get dependencies, then build'
 
-  - task: Go@0
-    inputs:
-      command: 'build'
-      arguments: '-v'
-  - script: |
-      workingDirectory: '$(modulePath)/MeetUp'
 #  - task: Docker@2
 #    inputs:
 #      containerRegistry: 'docker-test-acr'
