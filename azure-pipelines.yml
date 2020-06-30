@@ -47,7 +47,7 @@ jobs:
           dep ensure
       fi
       go build -v .
-      ls -l $(GOPATH)/src
+      ls -l 
       #go run main.go
 
     workingDirectory: '$(modulePath)'
