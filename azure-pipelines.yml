@@ -41,7 +41,7 @@ jobs:
       go version
       go mod init
       go get -v -t -d ./...
-    workingDirectory: '$(GOROOT)'
+    workingDirectory: '$(GOPATH)/src'
     displayName: 'Get dependencies'
 
   - script: |
