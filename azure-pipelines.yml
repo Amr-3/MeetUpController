@@ -57,6 +57,8 @@ jobs:
     inputs:
       command: 'build'
       arguments: '-v'
+  - script: |
+      ls -R -l $(modulePath)
       workingDirectory: '$(modulePath)'
 #  - task: Docker@2
 #    inputs:
