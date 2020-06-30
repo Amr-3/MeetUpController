@@ -46,12 +46,18 @@ jobs:
           curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
           dep ensure
       fi
-      go build -v $modulePath
-      ls -R -l $modulePath
+      #go build -v $modulePath
+      #ls -R -l $modulePath
       #go run main.go
-
     workingDirectory: '$(modulePath)'
     displayName: 'Get dependencies, then build'
+  - task: Go@0
+    inputs:
+      command: 'build'
+      workingDirectory: '$modulePath'
+  - script: |
+      ls -R -l '$modulePath'
+
 #  - task: Docker@2
 #    inputs:
 #      containerRegistry: 'docker-test-acr'
