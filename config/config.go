@@ -21,7 +21,7 @@ func LoadConfig() {
 	Config.DB_PASSWORD="9tS3qY8BKwXb1n8d"
 	//err := gonfig.GetConf("./config/config.json", &Config)
 	Config.CONNECTION_STRING = "mongodb+srv://" + Config.DB_USERNAME + ":" + Config.DB_PASSWORD + "@test-cluster-dvxai.mongodb.net/meetup"
-	/*if err != nil {
-		log.Fatal(err)
-	}*/
+	//if err != nil {
+	//	log.Fatal(err)
+	//}
 }
