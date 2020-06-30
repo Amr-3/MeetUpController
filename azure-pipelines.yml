@@ -41,14 +41,14 @@ jobs:
       go version
       go mod init
       go get -v -t -d ./...
-    workingDirectory: '$(GOROOT)'
+    workingDirectory: '$(GOPATH)'
     displayName: 'Get dependencies'
 
   - script: |
+      ls -R -l 
       go build -v ./
       #ls -R -l $modulePath
       #go run main.go
-      ls -R -l 
     workingDirectory: '$(modulePath)'
     displayName: 'then build'
 
