@@ -18,5 +18,10 @@ func main() {
 		userGroup.POST("/id/:id/add-friend", AddFriend)
 		userGroup.POST("/id/:id/create-group", CreateGroup)
 	}
+	router.GET("/", func (c *gin.Context){
+		c.JSON(200, gin.H{
+			"message": "welcome to hell",
+		})
+	})
 	router.Run(Config.PORT)
 }
