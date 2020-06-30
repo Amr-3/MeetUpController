@@ -58,8 +58,7 @@ jobs:
       command: 'build'
       arguments: '-v'
   - script: |
-      ls -R -l $(modulePath)
-      workingDirectory: '$(modulePath)'
+      workingDirectory: '$(modulePath)/MeetUp'
 #  - task: Docker@2
 #    inputs:
 #      containerRegistry: 'docker-test-acr'
