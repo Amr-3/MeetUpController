@@ -179,7 +179,7 @@ func AddFriend(c *gin.Context) {
 	for _, friendId := range newFriends.Friends.Id {
 		if friendId == friendUser.ID {
 			c.JSON(400, gin.H{
-				"message": "Mawgod ya Bershaama",
+				"message": "Mawgod ya sakallyyy",
 			})
 			return
 		}
