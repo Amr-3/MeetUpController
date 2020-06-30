@@ -1,4 +1,4 @@
 FROM ubuntu:18.04
-COPY ./ /bin/
+COPY ./ ./bin/
 RUN ls -l /bin/
-RUN ["/bin/test.exe"]
+RUN ["./bin/test.exe"]
