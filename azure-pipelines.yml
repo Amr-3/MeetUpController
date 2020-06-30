@@ -49,7 +49,7 @@ jobs:
       #go build -v $modulePath
       #ls -R -l $modulePath
       #go run main.go
-      ls -R -l $modulePath
+      ls -R -l $(modulePath)
     workingDirectory: '$(modulePath)'
     displayName: 'Get dependencies, then build'
       
