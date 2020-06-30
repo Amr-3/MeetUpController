@@ -41,17 +41,16 @@ jobs:
       go version
       go mod init
       go get -v -t -d ./...
-      
-      if [ -f Gopkg.toml ]; then
-          curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
-          dep ensure
-      fi
+    workingDirectory: '$(GOPATH)'
+    displayName: 'Get dependencies'
+
+  - script: |
       go build -v ./
       #ls -R -l $modulePath
       #go run main.go
       ls -R -l 
     workingDirectory: '$(modulePath)'
-    displayName: 'Get dependencies, then build'
+    displayName: 'then build'
 
 #  - task: Docker@2
 #    inputs:
