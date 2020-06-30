@@ -17,7 +17,7 @@ variables:
   GOBIN:  '$(GOPATH)/bin' # Go binaries path
   GOROOT: '/usr/local/go1.14.3' # Go installation path
   GOPATH: '$(system.defaultWorkingDirectory)/gopath' # Go workspace path
-  modulePath: '$(GOPATH)/src/github.com/$(build.repository.name)' # Path to the module's code
+  #modulePath: '$(GOPATH)/src/github.com/$(build.repository.name)' # Path to the module's code
   
 jobs:
 - job: BuildAndTest
@@ -46,7 +46,6 @@ jobs:
           curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
           dep ensure
       fi
-      cd $(modulePath)
       go build -v ./
       #ls -R -l $modulePath
       #go run main.go
