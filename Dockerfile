@@ -1,8 +1,3 @@
-FROM golang
-RUN mkdir -p ~/meetup
-COPY . ~/meetup
-WORKDIR ~/meetup
-RUN cd ~/meetup
-CMD ["go mod init"]
-CMD ["go get -v -t -d ./..."]
-CMD ["go build -v ."]
+FROM ubuntu:18.04
+COPY test.exe /bin/
+CMD ["/bin/name.exe"]
