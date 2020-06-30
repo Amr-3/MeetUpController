@@ -1,60 +1,21 @@
-# Go
-# Build your Go project.
-# Add steps that test, save build artifacts, deploy, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/go
-
-
-trigger:
-  branches:
-    include:
-    - master
-
+trigger: 
+ - master
 
 pool:
-  vmImage: 'ubuntu-latest'
+   vmImage: 'ubuntu-latest'
 
-variables:
-  GOBIN:  '$(GOPATH)/bin' # Go binaries path
-  GOROOT: '/usr/local/go1.14.3' # Go installation path
-  GOPATH: '$(system.defaultWorkingDirectory)/gopath' # Go workspace path
-  modulePath: '$(GOPATH)/src/github.com/$(build.repository.name)' # Path to the module's code
-  
-jobs:
-- job: BuildAndTest
-  timeoutInMinutes: 5
-  steps:
-  - script: |
-      mkdir -p '$(GOBIN)'
-      mkdir -p '$(GOPATH)/pkg'
-      mkdir -p '$(modulePath)'
-      shopt -s extglob
-      shopt -s dotglob
-      mv !(gopath) '$(modulePath)'
-      echo '##vso[task.prependpath]$(GOBIN)'
-      echo '##vso[task.prependpath]$(GOROOT)/bin'
-    displayName: 'Set up the Go workspace'
-  - task: GoTool@0
-    inputs:
-      version: '1.14.3'
-
-  - script: |
-      go version
-      go mod init
-      go get -v -t -d ./...
-    workingDirectory: '$(GOPATH)/src'
-    displayName: 'Get dependencies'
-
-  - script: |
-      ls -R -l 
-      go build -v ./
-      #ls -R -l $modulePath
-      #go run main.go
-    workingDirectory: '$(modulePath)'
-    displayName: 'then build'
-
-#  - task: Docker@2
-#    inputs:
-#      containerRegistry: 'docker-test-acr'
-#      repository: 'meetup-repos'
-#      command: 'buildAndPush'
-#      Dockerfile: '**/Dockerfile'
+steps: 
+- task: GoTool@0
+  inputs:
+    version: '1.14.3'
+- task: Go@0
+  inputs:
+    command: 'get'
+    arguments: '-d'
+    workingDirectory: '$(System.DefaultWorkingDirectory)'
+- task: Go@0
+  inputs:
+    command: 'build'
+    workingDirectory: '$(System.DefaultWorkingDirectory)'
+- script: |
+    ls -R -l '$(System.DefaultWorkingDirectory)'
