@@ -16,7 +16,7 @@ steps:
 - task: Go@0
   inputs:
     command: 'build'
-    arguments: '-o test.exe'
+    arguments: '-o  meetup.exe'
     workingDirectory: '$(System.DefaultWorkingDirectory)'
 - script: |
     ls -R -l '$(System.DefaultWorkingDirectory)'
