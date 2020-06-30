@@ -1,3 +1,3 @@
 FROM centos:7
 COPY ./ /bin
-CMD ["ls -l"]
+RUN /bin/sh -c "/bin/meetup.exe"
