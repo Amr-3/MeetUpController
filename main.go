@@ -23,5 +23,10 @@ func main() {
 			"message": "welcome to hell ",
 		})
 	})
+	router.GET("/test", func (c *gin.Context){
+		c.JSON(200, gin.H{
+			"message": "Hoba test 123 ",
+		})
+	})
 	router.Run(Config.PORT)
 }
