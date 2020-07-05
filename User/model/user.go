@@ -149,7 +149,7 @@ func RegisterAccount(c *gin.Context) {
 
 	//check if the email is unique
 	//found, err := DB.DbRead("email", usr.Email, "User", "email")
-	tmp,_ := url2.Parse("http://localhost:9000/CRUD/read")
+	tmp,_ := url2.Parse("https://db-crud-meetup.azurewebsites.net/CRUD/read")
 	url:=tmp.String()
 	request := gorequest.New()
 
